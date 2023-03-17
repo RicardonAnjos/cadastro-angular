@@ -1,57 +1,66 @@
 import { Component, OnInit } from '@angular/core';
+import { ClientesServiceMock } from '../../services/clientes.service'
 import { Cliente } from '../../models/clientes';
 
 @Component({
   selector: 'app-lista-cliente',
   templateUrl: './lista-cliente.component.html',
-  styleUrls: ['./lista-cliente.component.css']
+  styleUrls: ['./lista-cliente.component.css'],
+  providers: [ClientesServiceMock]
 })
 export class ListaClienteComponent implements OnInit {
     clientes: Cliente[] = [];
 
-    constructor() { }
-
-    getClientes() {
-        this.clientes = [
-            {
-                id: '1',
-                nome: 'João da Silva',
-                cpf: '123.456.789-00',
-                email: 'joao.silva@gmail.com',
-                telefone: '(11) 99999-9999',
-            },
-            {
-                id: '2',
-                nome: 'Maria dos Santos',
-                cpf: '987.654.321-00',
-                email: 'maria.santos@gmail.com',
-                telefone: '(21) 98888-8888',
-            },
-            {
-                id: '3',
-                nome: 'Pedro Almeida',
-                cpf: '111.222.333-44',
-                email: 'pedro.almeida@gmail.com',
-                telefone: '(47) 97777-7777',
-            },
-            {
-                id: '4',
-                nome: 'Luiza Andrade',
-                cpf: '555.666.777-88',
-                email: 'luiza.andrade@gmail.com',
-                telefone: '(31) 96666-6666',
-            },
-            {
-                id: '5',
-                nome: 'Roberto Oliveira',
-                cpf: '999.888.777-66',
-                email: 'roberto.oliveira@gmail.com',
-                telefone: '(51) 95555-5555',
-            },
-        ];
+    constructor(private clientesService: ClientesServiceMock) { }
+    getCliente() {
+        this.clientesService.getClientes().subscribe(clientes => {
+            this.clientes = clientes;
+        });
     }
 
-    ngOnInit(): void {
-        this.getClientes();
+    getclienteById(id: string) {
+        this.clientesService.getClienteById(id).subscribe(cliente => {
+            console.log(cliente);
+        });
+    }
+
+    addCliente(cliente: Cliente) {
+        this.clientesService.addCliente(cliente).subscribe(cliente => {
+            this.clientes.push(cliente);
+        });
+    }
+
+    updateCliente(id: string) {
+        this.clientesService.getClienteById(id).subscribe(cliente => {
+            cliente.nome = "Novo nome";
+            this.clientesService.updateCliente(id, cliente).subscribe(cliente => {
+                console.log(cliente);
+            });
+        });
+    }
+
+    deleteCliente(id: string) {
+        this.clientesService.getClienteById(id).subscribe(cliente => {
+            this.clientesService.deleteCliente(id).subscribe(() => {
+                const index = this.clientes.indexOf(cliente);
+                if (index >= 0) {
+                    this.clientes.splice(index, 1);
+                }
+            });
+        });
+    }
+    
+    ngOnInit() {
+        this.getCliente();
+        this.getclienteById('1');
+        this.addCliente({
+            id: '6',
+            nome: 'Roberto Oliveira',
+            cpf: '999.888.777-66',
+            email: 'robertosilva@gmail.com',
+            telefone: '(94) 99888-5522',
+        });
+        this.updateCliente('1');
+        this.deleteCliente('1');
     }
 }
