@@ -1,0 +1,144 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nome": "João",
+      "cpf": "111.111.111-11",
+      "email": "joao@gmail.com",
+      "telefone": "(11) 1111-1111"
+    },
+    {
+      "id": "2",
+      "nome": "Maria",
+      "cpf": "222.222.222-22",
+      "email": "maria@gmail.com",
+      "telefone": "(22) 2222-2222"
+    },
+    {
+      "id": "3",
+      "nome": "Pedro",
+      "cpf": "333.333.333-33",
+      "email": "pedro@gmail.com",
+      "telefone": "(33) 3333-3333"
+    },
+    {
+      "id": "4",
+      "nome": "Carlos",
+      "cpf": "444.444.444-44",
+      "email": "carlos@gmail.com",
+      "telefone": "(44) 4444-4444"
+    },
+    {
+      "id": "5",
+      "nome": "Ana",
+      "cpf": "555.555.555-55",
+      "email": "ana@gmail.com",
+      "telefone": "(55) 5555-5555"
+    },
+    {
+      "id": "6",
+      "nome": "José",
+      "cpf": "666.666.666-66",
+      "email": "jose@gmail.com",
+      "telefone": "(66) 6666-6666"
+    },
+    {
+      "id": "7",
+      "nome": "Laura",
+      "cpf": "777.777.777-77",
+      "email": "laura@gmail.com",
+      "telefone": "(77) 7777-7777"
+    },
+    {
+      "id": "8",
+      "nome": "Luiz",
+      "cpf": "888.888.888-88",
+      "email": "luiz@gmail.com",
+      "telefone": "(88) 8888-8888"
+    },
+    {
+      "id": "9",
+      "nome": "Mariana",
+      "cpf": "999.999.999-99",
+      "email": "mariana@gmail.com",
+      "telefone": "(99) 9999-9999"
+    },
+    {
+      "id": "10",
+      "nome": "Rafael",
+      "cpf": "000.000.000-00",
+      "email": "rafael@gmail.com",
+      "telefone": "(00) 0000-0000"
+    },
+    {
+      "id": "11",
+      "nome": "Camila",
+      "cpf": "111.222.333-44",
+      "email": "camila@gmail.com",
+      "telefone": "(11) 2222-3333"
+    },
+    {
+      "id": "12",
+      "nome": "Fernando",
+      "cpf": "444.555.666-77",
+      "email": "fernando@gmail.com",
+      "telefone": "(44) 5555-6666"
+    },
+    {
+      "id": "13",
+      "nome": "Vanessa",
+      "cpf": "777.888.999-00",
+      "email": "vanessa@gmail.com",
+      "telefone": "(77) 8888-9999"
+    },
+    {
+      "id": "14",
+      "nome": "Miguel",
+      "cpf": "111.444.777-00",
+      "email": "miguel@gmail.com",
+      "telefone": "(11) 4444-7777"
+    },
+    {
+      "id": "15",
+      "nome": "Isabela",
+      "cpf": "222.555.888-11",
+      "email": "isabela@gmail.com",
+      "telefone": "(22) 5555-8888"
+    },
+    {
+      "id": "16",
+      "nome": "Gabriel",
+      "cpf": "333.666.999-22",
+      "email": "gabs-12@gmail.com",
+      "telefone": "(33) 6666-9999"
+    },
+    {
+      "id": "17",
+      "nome": "Julia",
+      "cpf": "444.777.000-33",
+      "email": "juu@gmail.com",
+      "telefone": "(44) 7777-0000"
+    },
+    {
+      "id": "18",
+      "nome": "Larissa",
+      "cpf": "555.888.111-44",
+      "email": "llaari@gmail.com",
+      "telefone": "(55) 8888-1111"
+    },
+    {
+      "id": "19",
+      "nome": "Matheus",
+      "cpf": "666.999.222-55",
+      "email": "math@gmail.com",
+      "telefone": "(66) 9999-2222"
+    },
+    {
+      "id": "20",
+      "nome": "Luisa",
+      "cpf": "777.000.333-66",
+      "email": "luisa.l@gmail.com",
+      "telefone": "(77) 0000-3333"
+    }
+  ]
+}

@@ -1,83 +1,78 @@
-import { Observable } from 'rxjs';
-import { Cliente } from '../models/clientes'
+import { Injectable } from '@angular/core';
+import { Observable, throwError, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
+import { Cliente } from '../models/clientes';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ClientesServiceMock {
-  private clientes: Cliente[] = [
-    {
-      id: '1',
-      nome: 'João Silva',
-      cpf: '111.222.333-44',
-      email: 'joao.silva@gmail.com',
-      telefone: '(11) 98765-4321'
-    },
-    {
-      id: '2',
-      nome: 'Maria Souza',
-      cpf: '222.333.444-55',
-      email: 'maria.souza@gmail.com',
-      telefone: '(11) 98765-4322'
-    },
-    {
-      id: '3',
-      nome: 'José Santos',
-      cpf: '333.444.555-66',
-      email: 'jose.santos@gmail.com',
-      telefone: '(11) 98765-4323'
+  private apiURL = 'http://localhost:5000/clientes';
+  private jsonHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+  constructor(private http: HttpClient) { }
+
+  getClientes(): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(this.apiURL)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getClienteById(id: string): Observable<Cliente> {
+    if (id === '') {
+      return of(this.initializeCliente());
     }
-  ];
-
-  getClientes() {
-    return new Observable<Cliente[]>(observer => {
-      observer.next(this.clientes);
-      observer.complete();
-    });
+    
+    return this.http.get<Cliente>(`${this.apiURL}/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
-  getClienteById(id: string) {
-    const cliente = this.clientes.find(c => c.id === id);
-    return new Observable<Cliente>(observer => {
-      observer.next(cliente);
-      observer.complete();
-    });
+  createCliente(cliente: Cliente): Observable<Cliente> {
+    return this.http.post<Cliente>(this.apiURL, cliente, { headers: this.jsonHeader })
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
-  addCliente(cliente: Cliente) {
-    return new Observable<Cliente>(observer => {
-      cliente.id = (this.clientes.length + 1).toString();
-      this.clientes.push(cliente);
-      observer.next(cliente);
-      observer.complete();
-    });
+  updateCliente(cliente: Cliente): Observable<Cliente> {
+    return this.http.put<Cliente>(`${this.apiURL}/${cliente.id}`, cliente, { headers: this.jsonHeader })
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
-  updateCliente(id: string, cliente: Cliente) {
-    const index = this.clientes.findIndex(c => c.id === id);
-    if (index >= 0) {
-      cliente.id = id;
-      this.clientes[index] = cliente;
-      return new Observable<Cliente>(observer => {
-        observer.next(cliente);
-        observer.complete();
-      });
-    } else {
-      return new Observable<never>(observer => {
-        observer.error(`Cliente com id ${id} não encontrado.`);
-      });
+  deleteCliente(id: string): Observable<Cliente> {
+    return this.http.delete<Cliente>(`${this.apiURL}/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(err: HttpErrorResponse): never {
+    let errorMessage: string;
+
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
     }
+    else {
+      errorMessage = `Backend returned code ${err.status}: ${err.statusText || ''}`;
+    }
+
+    throw new Error(errorMessage);
   }
 
-  deleteCliente(id: string) {
-    const index = this.clientes.findIndex(c => c.id === id);
-    if (index >= 0) {
-      this.clientes.splice(index, 1);
-      return new Observable<void>(observer => {
-        observer.next();
-        observer.complete();
-      });
-    } else {
-      return new Observable<never>(observer => {
-        observer.error(`Cliente com id ${id} não encontrado.`);
-      });
-    }
+  private initializeCliente(): Cliente {
+    return {
+      id: '',
+      nome: '',
+      cpf: '',
+      email: '',
+      telefone: ''
+    };
   }
 }

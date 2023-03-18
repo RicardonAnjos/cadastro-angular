@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { ListaClienteComponent } from './clientes/components/lista-cliente/lista-cliente.component';
 import { CadastroClienteComponent } from './clientes/components/cadastro-cliente/cadastro-cliente.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
