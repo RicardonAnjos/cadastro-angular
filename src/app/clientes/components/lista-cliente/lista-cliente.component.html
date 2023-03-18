@@ -9,6 +9,7 @@
         <tr>
           <th>Nome</th>
           <th>CPF</th>
+          <th>Email</th>
           <th>Telefone</th>
           <th>Ações</th>
         </tr>
@@ -17,6 +18,7 @@
         <tr *ngFor="let cliente of clientes">
           <td>{{ cliente.nome }}</td>
           <td>{{ cliente.cpf }}</td>
+          <td>{{ cliente.email }}</td>
           <td>{{ cliente.telefone }}</td>
           <td>
             <button class="btn btn-primary btn-sm">
