@@ -64,7 +64,7 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
       nome: [this.cliente.nome, [Validators.required, Validators.minLength(2)]],
       cpf: [this.cliente.cpf, [Validators.required, Validators.minLength(11)]],
       email: [this.cliente.email, [Validators.required, Validators.email]],
-      telefone: [this.cliente.telefone, [Validators.required]]
+      telefone: [this.cliente.telefone, Validators.required]
     });
   }
 
@@ -100,10 +100,9 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
   }
 
    showClient(cliente: Cliente): void {
-    this.clienteForm.reset();
     this.cliente = cliente;
 
-    if (this.formMode === '') {
+    if (this.formMode === NEW_MODE) {
       this.pageTitle = ADD_CLIENTE_TITLE;
     } else {
       this.pageTitle = `${EDIT_CLIENTE_TITLE}: ${this.cliente.nome}`;
