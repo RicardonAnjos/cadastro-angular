@@ -26,4 +26,15 @@ export class ListaClienteComponent implements OnInit {
         }
         );
     }
+
+    deleteCliente(id: string) {
+        this.clientesService.deleteCliente(id).subscribe((response) => {
+            console.log(response);
+            this.getCliente();
+        },
+        (error) => {
+            console.log(error);
+        }
+        );
+    }
 }

@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: '', component: ListaClienteComponent},
   { path: 'clientes', component: ListaClienteComponent },
   { path: 'cadastrar', component: CadastroClienteComponent },
-  { path: 'clientes/:id', component: CadastroClienteComponent },
+  { path: 'clientes/:id/editar', component: CadastroClienteComponent },
 ];
 
 @NgModule({

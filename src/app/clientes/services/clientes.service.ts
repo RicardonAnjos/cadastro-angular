@@ -9,6 +9,7 @@ import { Cliente } from '../models/clientes';
   providedIn: 'root'
 })
 export class ClientesServiceMock {
+  [x: string]: any;
   private apiURL = 'http://localhost:5000/clientes';
   private jsonHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
 
