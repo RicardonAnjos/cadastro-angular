@@ -7,6 +7,7 @@ import { Cliente } from '../../models/clientes';
 import { ClientesServiceMock } from '../../services/clientes.service';
 
 const NEW_MODE = 'new';
+const EDIT_MODE = 'edit';
 const ADD_CLIENTE_TITLE = 'Adicionar Cliente';
 const EDIT_CLIENTE_TITLE = 'Editar Cliente';
 
@@ -18,7 +19,7 @@ const EDIT_CLIENTE_TITLE = 'Editar Cliente';
 export class CadastroClienteComponent implements OnInit, OnDestroy {
   formMode = NEW_MODE;
   pageTitle = ADD_CLIENTE_TITLE;
-  clienteForm: FormGroup;
+  clienteForm: FormGroup = new FormGroup({});
   cliente: Cliente = {
     id: '',
     nome: '',
@@ -27,67 +28,79 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
     telefone: ''
   };
   validationMessages = {
-    nome: {},
-    cpf: {},
-    email: {},
-    telefone: {}
+    nome: {
+      required: 'O nome é obrigatório',
+      minlength: 'O nome deve ter no mínimo 2 caracteres',
+    },
+    cpf: {
+      required: 'O CPF é obrigatório',
+      minlength: 'O CPF deve ter no mínimo 11 caracteres',
+    },
+    email: {
+      required: 'O email é obrigatório',
+      email: 'O email deve ser válido',
+    },
+    telefone: {
+      required: 'O telefone é obrigatório',
+    }
   };
-  subscription: Subscription = new Subscription;
+  subscription = new Subscription;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private clienteService: ClientesServiceMock
-  ) {
+  ) { }
 
-    this.clienteForm = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      cpf: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telefone: ['', Validators.required]
-    });
-
+  ngOnInit(): void {
+    this.initForm();
+    this.initFormMode();
+    this.initRoutePatamsSubscription();
   }
 
-  ngOnInit() {
-    this.formMode = this.route.snapshot.params['id'] ? 'edit' : 'new';
-    this.subscription = this.route.paramMap.subscribe({
-      next: params => {
-        const id = params.get('id');
-        const name = params.get('name');
+   initForm(): void {
+    this.clienteForm = this.fb.group({
+      nome: [this.cliente.nome, [Validators.required, Validators.minLength(2)]],
+      cpf: [this.cliente.cpf, [Validators.required, Validators.minLength(11)]],
+      email: [this.cliente.email, [Validators.required, Validators.email]],
+      telefone: [this.cliente.telefone, [Validators.required]]
+    });
+  }
 
-        if (id == null || id == '' ) {
-          const cliente: Cliente = {
-            id: '',
-            nome: '',
-            cpf: '',
-            email: '',
-            telefone: ''
-          };
-          this.showClient(cliente);
-        } else {
+   initFormMode(): void {
+    const id = this.route.snapshot.params['id']
+    this.formMode = id ? EDIT_MODE : NEW_MODE;
+  }
+
+   initRoutePatamsSubscription(): void {
+    this.subscription.add(
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+
+        if (!id) {
+          this.showClient(this.cliente);
+        } else{
           this.getClient(id);
         }
-      },
-    });
+      }));
   }
 
-  onSubmit() {
-    
-  }
-  getClient(id: string): void {
-    this.clienteService.getClienteById(id)
-    .subscribe({
-      next: (cliente: Cliente) => this.showClient(cliente),
-      error: err => console.log(err)
-    });
+  onSubmit(): void {
+    this.saveCliente();
   }
 
-  showClient(cliente: Cliente): void {
-    if (this.clienteForm) {
-      this.clienteForm.reset();
-    }
+   getClient(id: string): void {
+    this.subscription.add(
+      this.clienteService.getClienteById(id).subscribe({
+        next: (cliente: Cliente) => this.showClient(cliente),
+        error: err => console.log(err)
+      })
+    );
+  }
+
+   showClient(cliente: Cliente): void {
+    this.clienteForm.reset();
     this.cliente = cliente;
 
     if (this.formMode === '') {
@@ -101,16 +114,15 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
       cpf: this.cliente.cpf,
       email: this.cliente.email,
       telefone: this.cliente.telefone
-    });
+    })
   }
 
-  excludeClient(): void {
-    if (this.cliente.id === '') {
+   excludClient(): void {
+    if (!this.cliente.id) {
       this.onSaveComplete();
     } else {
-      if (confirm(`Realmente deseja excluir o cliente: ${this.cliente.nome}?`)) {
-        this.clienteService.deleteCliente(this.cliente.id as string)
-        .subscribe({
+      if (confirm(`Tem certeza que deseja excluir o cliente: ${this.cliente.nome}?`)) {
+        this.clienteService.deleteCliente(this.cliente.id).subscribe({
           next: () => this.onSaveComplete(),
           error: err => console.log(err)
         });
@@ -118,37 +130,41 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveClient(): void {
+   saveCliente(): void {
     if (this.clienteForm.valid) {
       if (this.clienteForm.dirty) {
         const cliente = { ...this.cliente, ...this.clienteForm.value };
-
+  
         if (cliente.id === '') {
           this.clienteService.createCliente(cliente)
-          .subscribe({
-            next: () => this.onSaveComplete(),
-            error: err => console.log(err)
-          });
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => console.log(err)
+            });
         } else {
           this.clienteService.updateCliente(cliente)
-          .subscribe({
-            next: () => this.onSaveComplete(),
-            error: err => console.log(err)
-          });
+            .subscribe({
+              next: () => this.onSaveComplete(),
+              error: err => console.log(err)
+            });
         }
+      } else {
+        this.onSaveComplete();
       }
     } else {
-      this.onSaveComplete();
+      Object.keys(this.clienteForm.controls).forEach(key => {
+        this.clienteForm.controls[key].markAsTouched();
+      });
     }
   }
+  
 
   onSaveComplete(): void {
     this.clienteForm.reset();
     this.router.navigate(['/clientes']);
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 }

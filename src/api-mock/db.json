@@ -2,10 +2,10 @@
   "clientes": [
     {
       "id": "1",
-      "nome": "João",
+      "nome": "José Germano Do Nascimento",
       "cpf": "111.111.111-11",
       "email": "joao@gmail.com",
-      "telefone": "(11) 1111-1111"
+      "telefone": "94991405635"
     },
     {
       "id": "2",
@@ -37,7 +37,7 @@
     },
     {
       "id": "6",
-      "nome": "José",
+      "nome": "José de souza",
       "cpf": "666.666.666-66",
       "email": "jose@gmail.com",
       "telefone": "(66) 6666-6666"
