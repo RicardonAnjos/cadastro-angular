@@ -117,19 +117,6 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
     })
   }
 
-   excludClient(): void {
-    if (!this.cliente.id) {
-      this.onSaveComplete();
-    } else {
-      if (confirm(`Tem certeza que deseja excluir o cliente: ${this.cliente.nome}?`)) {
-        this.clienteService.deleteCliente(this.cliente.id).subscribe({
-          next: () => this.onSaveComplete(),
-          error: err => console.log(err)
-        });
-      }
-    }
-  }
-
    saveCliente(): void {
     if (this.clienteForm.valid) {
       if (this.clienteForm.dirty) {

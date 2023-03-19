@@ -10,6 +10,7 @@ import { Cliente } from '../../models/clientes';
 })
 export class ListaClienteComponent implements OnInit {
     clientes: Cliente[] = [];
+    deletingClienteId: string | undefined;
 
     constructor(private clientesService: ClientesServiceMock) { }
 
@@ -17,24 +18,20 @@ export class ListaClienteComponent implements OnInit {
         this.getCliente();
     }
 
-    getCliente() {
-        this.clientesService.getClientes().subscribe((clientes) => {
-            this.clientes = clientes;
-        },
-        (error) => {
-            console.log(error);
-        }
-        );
-    }
+    getCliente(): void {
+        this.clientesService.getClientes().subscribe({
+            next: (clientes) => this.clientes = clientes,
+            error: (error) => console.log(error)
+        });
+      }
 
-    deleteCliente(id: string) {
-        this.clientesService.deleteCliente(id).subscribe((response) => {
-            console.log(response);
-            this.getCliente();
-        },
-        (error) => {
-            console.log(error);
+      deleteCliente(id: string) {
+        if (confirm('Tem certeza que deseja excluir este cliente?')) {
+            this.deletingClienteId = id;
+            this.clientesService.deleteCliente(id).subscribe(() => {
+                this.clientes = this.clientes.filter((cliente) => cliente.id !== id);
+                this.deletingClienteId = '';
+            })
         }
-        );
     }
 }
